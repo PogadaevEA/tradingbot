@@ -1,0 +1,6 @@
+# Compiled class file
+.idea
+.run
+target/
+*.iml
+bin
