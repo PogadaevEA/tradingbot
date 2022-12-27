@@ -1,4 +1,4 @@
-package org.testtask.auction;
+package org.testtask.auction.model;
 
 import java.util.ArrayDeque;
 import java.util.Optional;

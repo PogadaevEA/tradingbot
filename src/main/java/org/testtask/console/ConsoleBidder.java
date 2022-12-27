@@ -9,8 +9,8 @@ import static org.testtask.console.ConsoleExecutor.PRODUCTS_TO_DRAW_ROUND;
 import static org.testtask.console.ConsoleExecutor.PRODUCTS_TO_ROUND_WINNER;
 
 /**
- * Console bidder is used only in console application and it cannot be used in a real business case.
- * Places the bid based on console input.
+ * Console bidder is used only in console application to test programmed bidder, and it cannot be used in a real business case.
+ * Places the competitor bid based on console input.
  */
 class ConsoleBidder implements Bidder {
 
@@ -20,10 +20,11 @@ class ConsoleBidder implements Bidder {
     private boolean initialized = false;
     private int monetaryUnits;
     private int quantityUnits;
-
     private int wonQuantity = 0;
 
-    public ConsoleBidder(Scanner scanner) {this.scanner = scanner;}
+    public ConsoleBidder(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
     @Override
     public void init(int quantity, int cash) {

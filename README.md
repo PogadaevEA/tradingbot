@@ -26,6 +26,20 @@ retains more MU wins.
 
 //TODO explain trading strategy
 
+## Getting started
+This application provides a simple console application to compete with implemented bot.
+To test it, please do the following instructions:
+
+> Preconditions: Java 17 should be installed at you machine.
+1. Clone repository:
+> git clone https://github.com/PogadaevEA/tradingbot.git
+2. Build fat jar and run tests:
+> ./mvnw clean install
+3. Run jar file, placed `/target`
+> java -jar target/tradingbot-1.0-SNAPSHOT.jar
+
+
+
 
 
 

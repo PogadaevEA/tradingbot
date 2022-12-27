@@ -22,7 +22,7 @@ public class BidderValidationService {
     private void validateAuctionQuantity(int quantity) {
         if (quantity < 2 || quantity % 2 != 0) {
             throw new BidderValidationException(
-                    "Attempt to initiate bidder, but the quantity of the product does not comply with the auction rules."
+                    "Attempt to initiate bidder, but the quantity of the product does not comply with the auction rules. "
                     + "It must be an even positive number [2, 4, 6 ...]."
             );
         }

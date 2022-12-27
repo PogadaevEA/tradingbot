@@ -1,4 +1,4 @@
-package org.testtask.auction;
+package org.testtask.auction.model;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +22,7 @@ class BidsHistoryTest {
     }
 
     @Test
-    void should_throw_exception_when_add_round_history_with_null_value() {
+    void should_throw_exception_on_add_round_history_if_value_is_null() {
         // given
         BidsHistory bidsHistory = new BidsHistory();
 
@@ -33,7 +33,7 @@ class BidsHistoryTest {
     }
 
     @Test
-    void should_return_true_when_round_history_is_empty() {
+    void should_return_true_on_round_history_is_empty() {
         // given
         BidsHistory bidsHistory = new BidsHistory();
 
@@ -45,7 +45,7 @@ class BidsHistoryTest {
     }
 
     @Test
-    void should_return_true_when_round_history_is_not_empty() {
+    void should_return_true_on_round_history_is_not_empty() {
         // given
         BidsHistory bidsHistory = new BidsHistory();
         bidsHistory.addRoundHistory(new BidsRound(10, 20));
@@ -71,7 +71,7 @@ class BidsHistoryTest {
     }
 
     @Test
-    void should_return_empty_value_when_last_competitor_bid_does_not_exist() {
+    void should_return_empty_value_on_last_competitor_bid_does_not_exist() {
         // given
         BidsHistory bidsHistory = new BidsHistory();
 

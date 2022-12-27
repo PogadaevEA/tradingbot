@@ -1,6 +1,6 @@
 package org.testtask.auction.service;
 
-import org.testtask.auction.BidderContext;
+import org.testtask.auction.model.BidderContext;
 import org.testtask.auction.calculator.*;
 
 import java.util.HashMap;
@@ -16,11 +16,9 @@ public class BidderStrategyResolverService {
     private final Map<StrategyType, BidderCalculator> strategies = new HashMap<>();
 
     public BidderStrategyResolverService() {
-        FirstBidBidderCalculator firstBidBidderStrategy = new FirstBidBidderCalculator();
         EmptyOwnBalanceBidderCalculator emptyOwnBalanceBidderStrategy = new EmptyOwnBalanceBidderCalculator();
         EmptyCompetitorBalanceBidderCalculator emptyCompetitorBalanceBidderStrategy = new EmptyCompetitorBalanceBidderCalculator();
 
-        strategies.put(firstBidBidderStrategy.getType(), firstBidBidderStrategy);
         strategies.put(emptyOwnBalanceBidderStrategy.getType(), emptyOwnBalanceBidderStrategy);
         strategies.put(emptyCompetitorBalanceBidderStrategy.getType(), emptyCompetitorBalanceBidderStrategy);
     }

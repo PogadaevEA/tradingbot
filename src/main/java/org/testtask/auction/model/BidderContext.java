@@ -1,4 +1,4 @@
-package org.testtask.auction;
+package org.testtask.auction.model;
 
 /**
  * Contains relevant info to the current bidder during the auction execution.
@@ -12,6 +12,7 @@ public class BidderContext {
     private final BidsHistory bidsHistory = new BidsHistory();
 
     private int ownCashBalance;
+
     private int competitorCashBalance;
 
     private int wonProductQuantity = 0;
@@ -60,8 +61,16 @@ public class BidderContext {
         return ownCashBalance;
     }
 
+    public void setOwnCashBalance(int ownCashBalance) {
+        this.ownCashBalance = ownCashBalance;
+    }
+
     public int getCompetitorCashBalance() {
         return competitorCashBalance;
+    }
+
+    public void setCompetitorCashBalance(int competitorCashBalance) {
+        this.competitorCashBalance = competitorCashBalance;
     }
 
     public int getEstimatedProductCost() {
@@ -70,5 +79,9 @@ public class BidderContext {
 
     public int getWonProductQuantity() {
         return wonProductQuantity;
+    }
+
+    public int getTotalProductQuantity() {
+        return totalProductQuantity;
     }
 }

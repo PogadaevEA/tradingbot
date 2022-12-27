@@ -1,6 +1,7 @@
 package org.testtask.auction;
 
 import org.testtask.auction.calculator.StrategyType;
+import org.testtask.auction.model.BidderContext;
 import org.testtask.auction.service.BidderStrategyResolverService;
 import org.testtask.auction.service.BidderValidationService;
 
@@ -36,6 +37,7 @@ public class StrategiesBasedBidder implements Bidder {
      * TODO:
      * 1. Think about what would have global implications for any auctions that collect historical bid data and adapt when excited
      * 2. mb update the object that stores the percentage / number of successful bets and the score?
+     * 3. what if call is in wrong order?
      */
     @Override
     public void bids(int own, int other) {

@@ -1,6 +1,6 @@
 package org.testtask.auction.calculator;
 
-import org.testtask.auction.BidderContext;
+import org.testtask.auction.model.BidderContext;
 
 /**
  * The strategy is suitable if own cash limit is already reached.

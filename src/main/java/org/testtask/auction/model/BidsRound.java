@@ -1,4 +1,4 @@
-package org.testtask.auction;
+package org.testtask.auction.model;
 
 /**
  * Contains own and other bids for a certain auction round.
