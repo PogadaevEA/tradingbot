@@ -21,7 +21,8 @@ public class BidderStrategyResolverService {
         bidderCalculators = Set.of(
                 new EmptyOwnBalanceBidderCalculator(),
                 new EmptyCompetitorBalanceBidderCalculator(),
-                new AdvantageInQuantityBidderCalculator()
+                new AdvantageInQuantityBidderCalculator(),
+                new ForecastPriceBidderCalculator()
         );
     }
 

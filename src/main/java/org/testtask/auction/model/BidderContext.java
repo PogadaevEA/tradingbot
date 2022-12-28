@@ -1,5 +1,7 @@
 package org.testtask.auction.model;
 
+import java.util.List;
+
 /**
  * Contains relevant info to the current bidder during the auction execution.
  */
@@ -9,17 +11,18 @@ public class BidderContext {
     private static final int PRODUCTS_TO_DRAW_ROUND = 1;
 
     private boolean initialized;
-    private BidsHistory bidsHistory;
+    private WinnerBidsHistory winnerBidsHistory;
 
     private int ownCashBalance;
     private int competitorCashBalance;
     private int wonProductQuantity;
     private int totalProductQuantity;
     private int estimatedProductCost;
+    private int remainingAuctionRounds;
 
     public BidderContext() {
         this.initialized = false;
-        this.bidsHistory = new BidsHistory();
+        this.winnerBidsHistory = new WinnerBidsHistory();
         this.wonProductQuantity = 0;
     }
 
@@ -29,19 +32,27 @@ public class BidderContext {
         this.ownCashBalance = cash;
         this.competitorCashBalance = cash;
         this.totalProductQuantity = quantity;
+        this.remainingAuctionRounds = quantity / PRODUCTS_TO_DRAW_ROUND;
     }
 
     public void updateAfterBid(int own, int other) {
-        if (isCompetitorLoser(own, other)) {
-            wonProductQuantity += PRODUCTS_TO_ROUND_WINNER;
-        }
-        if(isDraw(own, other)) {
-            wonProductQuantity += PRODUCTS_TO_DRAW_ROUND;
-        }
+        updateQuantityAndHistoryData(own, other);
 
         ownCashBalance -= own;
         competitorCashBalance -= other;
-        bidsHistory.addRoundHistory(new BidsRound(own, other));
+        remainingAuctionRounds -= 1;
+    }
+
+    private void updateQuantityAndHistoryData(int own, int other) {
+        if (isCompetitorLoser(own, other)) {
+            wonProductQuantity += PRODUCTS_TO_ROUND_WINNER;
+            winnerBidsHistory.addWinnerBidsHistory(own);
+        } else if(isDraw(own, other)) {
+            wonProductQuantity += PRODUCTS_TO_DRAW_ROUND;
+            winnerBidsHistory.addWinnerBidsHistory(own);
+        } else {
+            winnerBidsHistory.addWinnerBidsHistory(other);
+        }
     }
 
     private boolean isCompetitorLoser(int own, int other) {
@@ -54,20 +65,21 @@ public class BidderContext {
 
     private BidderContext(BidderContextBuilder builder) {
         this.initialized = builder.initialized;
-        this.bidsHistory = builder.bidsHistory;
+        this.winnerBidsHistory = builder.winnerBidsHistory;
         this.ownCashBalance = builder.ownCashBalance;
         this.competitorCashBalance = builder.competitorCashBalance;
         this.wonProductQuantity = builder.wonProductQuantity;
         this.totalProductQuantity = builder.totalProductQuantity;
         this.estimatedProductCost = builder.estimatedProductCost;
+        this.remainingAuctionRounds = builder.remainingAuctionRounds;
     }
 
     public boolean isInitialized() {
         return initialized;
     }
 
-    public BidsHistory getBidsHistory() {
-        return bidsHistory;
+    public WinnerBidsHistory getBidsHistory() {
+        return winnerBidsHistory;
     }
 
     public int getOwnCashBalance() {
@@ -90,20 +102,30 @@ public class BidderContext {
         return totalProductQuantity;
     }
 
+    public int getRemainingAuctionRounds() {
+        return remainingAuctionRounds;
+    }
+
     public static class BidderContextBuilder {
 
         private boolean initialized;
-        private BidsHistory bidsHistory;
+        private WinnerBidsHistory winnerBidsHistory;
         private int ownCashBalance;
         private int competitorCashBalance;
         private int wonProductQuantity;
         private int totalProductQuantity;
         private int estimatedProductCost;
+        private int remainingAuctionRounds;
 
         public BidderContextBuilder() {
             this.initialized = false;
-            this.bidsHistory = new BidsHistory();
+            this.winnerBidsHistory = new WinnerBidsHistory();
             this.wonProductQuantity = 0;
+        }
+
+        public BidderContextBuilder withWinnerBidsHistory(List<Integer> winnerBidsHistory) {
+            this.winnerBidsHistory.getWinnerBids().addAll(winnerBidsHistory);
+            return this;
         }
 
         public BidderContextBuilder withWonProductQuantity(int wonProductQuantity) {
@@ -128,6 +150,11 @@ public class BidderContext {
 
         public BidderContextBuilder withEstimatedProductCost(int estimatedProductCost) {
             this.estimatedProductCost = estimatedProductCost;
+            return this;
+        }
+
+        public BidderContextBuilder withRemainingAuctionRoundst(int remainingAuctionRounds) {
+            this.remainingAuctionRounds = remainingAuctionRounds;
             return this;
         }
 

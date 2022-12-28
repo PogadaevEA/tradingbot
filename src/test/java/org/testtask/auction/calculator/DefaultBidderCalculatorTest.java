@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DefaultBidderCalculatorTest {
 
-    @ParameterizedTest(name = "{index}. If estimatedProductCost = {0}, own cash balance = {1} Than expected = {2}")
+    @ParameterizedTest(name = "{index}. IF estimatedProductCost = {0}, own cash balance = {1} THEN expected = {2}")
     @MethodSource("testPlaceBidParameters")
     void should_place_bid_happy_path(int estimatedProductCost, int ownCashBalance, int expected) {
         // given
@@ -49,7 +49,9 @@ class DefaultBidderCalculatorTest {
         return Stream.of(
                 placeBidArgumentsOf(2, 10, 4),
                 placeBidArgumentsOf(2, 1, 1),
-                placeBidArgumentsOf(2, 10, 4)
+                placeBidArgumentsOf(2, 10, 4),
+                placeBidArgumentsOf(10, 1, 1),
+                placeBidArgumentsOf(0, 0, 0)
         );
     }
 

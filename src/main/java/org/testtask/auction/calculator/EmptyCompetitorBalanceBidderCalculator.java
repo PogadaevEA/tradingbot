@@ -10,7 +10,7 @@ public class EmptyCompetitorBalanceBidderCalculator implements BidderCalculator 
 
     @Override
     public int placeBid(BidderContext context) {
-        return 1;
+        return Math.min(context.getOwnCashBalance(), 1);
     }
 
     @Override

@@ -5,6 +5,8 @@ import org.testtask.auction.calculator.BidderCalculator;
 import org.testtask.auction.calculator.StrategyType;
 import org.testtask.auction.model.BidderContext;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,5 +78,21 @@ class BidderStrategyResolverServiceTest {
 
         // then
         assertThat(result.getType()).isEqualTo(StrategyType.ADVANTAGE_IN_QUANTITY);
+    }
+
+    @Test
+    void should_return_FORECAST_PRICE_bidder_strategy_on_resolve_if_matches() {
+        // given
+        BidderContext context = new BidderContext.BidderContextBuilder()
+                .withOwnCashBalance(1)
+                .withCompetitorCashBalance(1)
+                .withWinnerBidsHistory(List.of(1, 2, 1))
+                .build();
+
+        // when
+        BidderCalculator result = new BidderStrategyResolverService().resolve(context);
+
+        // then
+        assertThat(result.getType()).isEqualTo(StrategyType.FORECAST_PRICE);
     }
 }

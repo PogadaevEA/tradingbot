@@ -1,7 +1,6 @@
 # Trading bot
 
-This trading bot stands for participation in the auction and can compete with one of another trading bot,
-which follow the rules of the auction:
+This trading can participate in the auction and can compete with one of another trading bot, which follow the same rules of the auction:
 
 **_GENERAL INFO_**
 
@@ -47,29 +46,28 @@ It always places ZERO monetary unit (MU), because it doesn't make any sense to s
 4. [AdvantageInQuantityBidder calculator](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fcalculator%2FAdvantageInQuantityBidderCalculator.java)
 
 This strategy _FORECAST_PRICE_ is based on the article ["Forecasting electricity prices using bid data"](https://www.sciencedirect.com/science/article/pii/S0169207022000711).
-The strategy is suitable when some historical data are existing to make some forecast about next bid. It uses historical data to analyze 
-previous bids and remaining own balance of cash.
-Historical data contains the previous bids of winner. This data are approximated in order to level the spread over points through
-and get a stable and smooth function. 
-
-$\sqrt{3x-1}+(1+x)^2$
+The strategy is suitable when some historical data are existing to make some forecast about next bid. It uses historical data to 
+analyze previous bids, own cash profit in any, number of remaining rounds and bit THRESHOLD for each round.
+Historical data contains the previous bids of winner. This data are approximated using median formula in order to level the spread over points through
+and get a stable and smooth function. Also, we need to avoid to be very risky, since we could spend all cash limit, and it is easy to lose. 
+There is a threshold applier to avoid this case.
+Steps of calculation:
+1. Get bid as a median value of winners based on historical data
+2. Calculate round threshold product cost based on 
+   1. Estimated product cost for one round = **initial cash limit / total rounds quantity**.
+   2. Threshold parameter = **4**.  
+Round threshold product cost = Estimated product cost for one round * Threshold parameter
+3. Take the minimum value of 1 and 2 steps. Since, there is the estimated cost of product for round, it doesn't make much sense to 
+overpay significantly. This leads to premature spending of all the cash limit and perhaps the opponent simply takes the risk of making high bets. 
+4. If bidder has profit in cash we could use this value in addition. It could be when opponent makes relly high bids.
+5. Next bid can't be more than remaining cash limit. Return the less of them.
 
 5. [DefaultBidder calculator](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fcalculator%2FDefaultBidderCalculator.java)
 
 If none of the above strategies fit the provided BidderContext, the _DEFAULT_ strategy will be chosen.
 It places either remaining cash limit or estimated product price, depending on what is left less.
 
-## Getting started
-This application provides a simple console application to compete with implemented bot.
-To test it, please do the following instructions:
-
-> Preconditions: Java 17 should be installed at you machine.
-1. Clone repository:
-> git clone https://github.com/PogadaevEA/tradingbot.git
-2. Build fat jar and run tests:
-> ./mvnw clean install
-3. Run jar file, placed `/target`
-> java -jar target/tradingbot-1.0-SNAPSHOT.jar
+> ❗No matter what strategy is used, the bit never exceeds the current cash limit.
 
 ## Further enhancements
 Further improvements **should primarily be based on formal product requirements**. But already now we can suggest possible ways to improve the application.
@@ -95,3 +93,21 @@ Based on this data, you can build more complex models and even apply machine lea
    2. Automatic delivery and deployment of new features. E.g configure **GitLab CI/CD** or **Jenkins**.
    3. Application containerization and separate stands for developers, testers and users.  It contributes to the stability of each stand, 
    independent feature delivery and increased product satisfaction. (**Docker, Kubernetes, Cloud platforms**)
+
+## Getting started
+This application provides a simple console application to compete with implemented bot.
+To test it, please do the following instructions:
+
+> ❗Preconditions: Java 17 should be installed at you machine.
+1. Clone repository:
+```text
+git clone https://github.com/PogadaevEA/tradingbot.git
+```
+2. Build fat jar and run tests:
+```text
+./mvnw clean install
+```
+3. Run jar file, placed `/target`
+```text
+java -jar target/tradingbot-1.0-SNAPSHOT.jar
+```

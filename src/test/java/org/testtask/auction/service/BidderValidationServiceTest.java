@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BidderValidationServiceTest {
 
-    @ParameterizedTest(name = "{index}. Quantity = {0}, cash = {1}, initialized = false")
+    @ParameterizedTest(name = "{index}. IF quantity = {0}, cash = {1}, initialized = false THAN expect NO exceptions")
     @MethodSource("testHappyPathParameters")
     void should_validate_on_init_happy_path(int quantity, int cash) {
         // given
@@ -36,7 +36,7 @@ class BidderValidationServiceTest {
                 .hasMessage("The reinitialization of the same bidder is prohibited.");
     }
 
-    @ParameterizedTest(name = "{index}. Quantity = {0}")
+    @ParameterizedTest(name = "{index}. IF quantity = {0} THAN expect BidderValidationException  ")
     @MethodSource("testQuantityParameters")
     void should_throw_exception_on_validate_on_init_if_quantity_less_than_two_or_not_even_number(int quantity) {
         // given

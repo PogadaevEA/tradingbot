@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConsoleInputValidatorTest {
 
-    @ParameterizedTest(name = "{index}. If quantity = {0} Then expected validation result = {1}")
+    @ParameterizedTest(name = "{index}. IF quantity = {0} THEN expected validation result = {1}")
     @MethodSource("testValidateQuantityParameters")
     void should_validate_auction_quantity(int quantity, boolean valid) {
         // when
@@ -22,7 +22,7 @@ class ConsoleInputValidatorTest {
         assertThat(result).isEqualTo(valid);
     }
 
-    @ParameterizedTest(name = "{index}. If cash limit = {0} Then expected validation result = {1}")
+    @ParameterizedTest(name = "{index}. IF cash limit = {0} THEN expected validation result = {1}")
     @MethodSource("testValidateCashLimitParameters")
     void should_validate_cash_limit(int cashLimit, boolean valid) {
         // when

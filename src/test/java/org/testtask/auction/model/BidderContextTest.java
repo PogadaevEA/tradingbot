@@ -19,7 +19,7 @@ class BidderContextTest {
         // then
         assertThat(context.isInitialized()).isTrue();
         assertThat(context.getEstimatedProductCost()).isEqualTo(2);
-        assertThat(context.getBidsHistory().getRoundsHistory()).isEmpty();
+        assertThat(context.getBidsHistory().getWinnerBids()).isEmpty();
         assertThat(context.getOwnCashBalance()).isEqualTo(20);
         assertThat(context.getCompetitorCashBalance()).isEqualTo(20);
         assertThat(context.getWonProductQuantity()).isEqualTo(0);
@@ -38,9 +38,7 @@ class BidderContextTest {
         context.updateAfterBid(5, 2);
 
         // then
-        assertThat(context.getBidsHistory().getRoundsHistory()).hasSize(1);
-        assertThat(context.getBidsHistory().getRoundsHistory().peek().getOwn()).isEqualTo(5);
-        assertThat(context.getBidsHistory().getRoundsHistory().peek().getOther()).isEqualTo(2);
+        assertThat(context.getBidsHistory().getWinnerBids()).hasSize(1);
         assertThat(context.getOwnCashBalance()).isEqualTo(15);
         assertThat(context.getCompetitorCashBalance()).isEqualTo(18);
         assertThat(context.getWonProductQuantity()).isEqualTo(2);
@@ -58,9 +56,7 @@ class BidderContextTest {
         context.updateAfterBid(5, 5);
 
         // then
-        assertThat(context.getBidsHistory().getRoundsHistory()).hasSize(1);
-        assertThat(context.getBidsHistory().getRoundsHistory().peek().getOwn()).isEqualTo(5);
-        assertThat(context.getBidsHistory().getRoundsHistory().peek().getOther()).isEqualTo(5);
+        assertThat(context.getBidsHistory().getWinnerBids()).hasSize(1);
         assertThat(context.getOwnCashBalance()).isEqualTo(15);
         assertThat(context.getCompetitorCashBalance()).isEqualTo(15);
         assertThat(context.getWonProductQuantity()).isEqualTo(1);
@@ -78,9 +74,7 @@ class BidderContextTest {
         context.updateAfterBid(2, 5);
 
         // then
-        assertThat(context.getBidsHistory().getRoundsHistory()).hasSize(1);
-        assertThat(context.getBidsHistory().getRoundsHistory().peek().getOwn()).isEqualTo(2);
-        assertThat(context.getBidsHistory().getRoundsHistory().peek().getOther()).isEqualTo(5);
+        assertThat(context.getBidsHistory().getWinnerBids()).hasSize(1);
         assertThat(context.getOwnCashBalance()).isEqualTo(18);
         assertThat(context.getCompetitorCashBalance()).isEqualTo(15);
         assertThat(context.getWonProductQuantity()).isEqualTo(0);
