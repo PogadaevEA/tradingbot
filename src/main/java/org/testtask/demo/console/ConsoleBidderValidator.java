@@ -1,4 +1,4 @@
-package org.testtask.console;
+package org.testtask.demo.console;
 
 /**
  * Validate console bidder on initialization or during the auction.

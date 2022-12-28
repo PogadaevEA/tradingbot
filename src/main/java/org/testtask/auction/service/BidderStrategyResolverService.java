@@ -1,10 +1,10 @@
 package org.testtask.auction.service;
 
-import org.testtask.auction.model.BidderContext;
 import org.testtask.auction.calculator.*;
+import org.testtask.auction.model.BidderContext;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Executes resolving of suitable strategies during the auction. Since multiple strategies exists {@link StrategyType},
@@ -13,20 +13,25 @@ import java.util.Map;
  */
 public class BidderStrategyResolverService {
 
-    private final Map<StrategyType, BidderCalculator> strategies = new HashMap<>();
+    private static final Logger log = Logger.getLogger(BidderStrategyResolverService.class.getName());
+
+    private final Set<BidderCalculator> bidderCalculators;
 
     public BidderStrategyResolverService() {
-        EmptyOwnBalanceBidderCalculator emptyOwnBalanceBidderStrategy = new EmptyOwnBalanceBidderCalculator();
-        EmptyCompetitorBalanceBidderCalculator emptyCompetitorBalanceBidderStrategy = new EmptyCompetitorBalanceBidderCalculator();
-
-        strategies.put(emptyOwnBalanceBidderStrategy.getType(), emptyOwnBalanceBidderStrategy);
-        strategies.put(emptyCompetitorBalanceBidderStrategy.getType(), emptyCompetitorBalanceBidderStrategy);
+        bidderCalculators = Set.of(
+                new EmptyOwnBalanceBidderCalculator(),
+                new EmptyCompetitorBalanceBidderCalculator(),
+                new AdvantageInQuantityBidderCalculator()
+        );
     }
 
     public BidderCalculator resolve(BidderContext context) {
-        return strategies.values().stream()
+        BidderCalculator calculator = bidderCalculators.stream()
                 .filter(strategy -> strategy.matches(context))
                 .findFirst()
                 .orElse(new DefaultBidderCalculator());
+        log.config("%s type will be used for getting next bid".formatted(calculator.getType()));
+
+        return calculator;
     }
 }

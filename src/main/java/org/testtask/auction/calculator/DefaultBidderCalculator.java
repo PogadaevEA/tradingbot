@@ -10,7 +10,7 @@ public class DefaultBidderCalculator implements BidderCalculator {
 
     @Override
     public int placeBid(BidderContext context) {
-        return Math.min(context.getOwnCashBalance(), context.getEstimatedProductCost());
+        return Math.min(context.getOwnCashBalance(), getEstimatedProductCostForRound(context));
     }
 
     @Override
@@ -21,5 +21,9 @@ public class DefaultBidderCalculator implements BidderCalculator {
     @Override
     public StrategyType getType() {
         return StrategyType.DEFAULT;
+    }
+
+    private int getEstimatedProductCostForRound(BidderContext context) {
+        return context.getEstimatedProductCost() * 2;
     }
 }

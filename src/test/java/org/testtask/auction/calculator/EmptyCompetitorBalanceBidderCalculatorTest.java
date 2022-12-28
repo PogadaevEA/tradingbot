@@ -21,8 +21,9 @@ class EmptyCompetitorBalanceBidderCalculatorTest {
     @Test
     void should_return_true_on_matches_if_empty_competitor_balance() {
         // given
-        BidderContext context = new BidderContext();
-        context.setCompetitorCashBalance(0);
+        BidderContext context = new BidderContext.BidderContextBuilder()
+                .withCompetitorCashBalance(0)
+                .build();
 
         // when
         boolean result = new EmptyCompetitorBalanceBidderCalculator().matches(context);
@@ -34,8 +35,9 @@ class EmptyCompetitorBalanceBidderCalculatorTest {
     @Test
     void should_return_false_on_matches_if_not_empty_competitor_balance() {
         // given
-        BidderContext context = new BidderContext();
-        context.setCompetitorCashBalance(1);
+        BidderContext context = new BidderContext.BidderContextBuilder()
+                .withCompetitorCashBalance(1)
+                .build();
 
         // when
         boolean result = new EmptyCompetitorBalanceBidderCalculator().matches(context);

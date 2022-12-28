@@ -1,6 +1,6 @@
 package org.testtask;
 
-import org.testtask.console.ConsoleExecutor;
+import org.testtask.demo.console.ConsoleExecutor;
 
 public class AuctionApplication {
 

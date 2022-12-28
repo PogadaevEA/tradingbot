@@ -23,8 +23,41 @@ In an auction, the program that is able to get more QU than the other wins. In c
 retains more MU wins.
 
 ## Trading strategy
+The bot encapsulates several betting [strategy types](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fcalculator%2FStrategyType.java)
+within itself. The decision about a next bet is made based on the current
+[BidderContext](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fmodel%2FBidderContext.java). 
+The [BidderContext](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fmodel%2FBidderContext.java) stores the fields relevant to 
+the current auction for the current round. Also, it keeps the [Historical Data](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fmodel%2FBidsHistory.java) of 
+the current auction from the very beginning.
 
-//TODO explain trading strategy
+### Available calculators:
+1. [EmptyOwnBalanceBidder calculator](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fcalculator%2FEmptyOwnBalanceBidderCalculator.java)
+
+The strategy _EMPTY_OWN_BALANCE_ is suitable if own cash limit is already reached. It always places ZERO monetary unit.
+
+2. [EmptyCompetitorBalanceBidder calculator](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fcalculator%2FEmptyCompetitorBalanceBidderCalculator.java)
+
+The strategy _EMPTY_COMPETITOR_BALANCE_ is suitable if an opponent already reached the cash limit. It always places ONE monetary unit, which is enough to win the round.
+
+3. [AdvantageInQuantityBidder calculator](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fcalculator%2FAdvantageInQuantityBidderCalculator.java)
+
+The strategy _ADVANTAGE_IN_QUANTITY_ is suitable if an opponent already reached the advantage in win quantity compared by opponent.
+It always places ZERO monetary unit (MU), because it doesn't make any sense to spend MU, since we already reached the advantage in auction.
+
+4. [AdvantageInQuantityBidder calculator](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fcalculator%2FAdvantageInQuantityBidderCalculator.java)
+
+This strategy _FORECAST_PRICE_ is based on the article ["Forecasting electricity prices using bid data"](https://www.sciencedirect.com/science/article/pii/S0169207022000711).
+The strategy is suitable when some historical data are existing to make some forecast about next bid. It uses historical data to analyze 
+previous bids and remaining own balance of cash.
+Historical data contains the previous bids of winner. This data are approximated in order to level the spread over points through
+and get a stable and smooth function. 
+
+$\sqrt{3x-1}+(1+x)^2$
+
+5. [DefaultBidder calculator](src%2Fmain%2Fjava%2Forg%2Ftesttask%2Fauction%2Fcalculator%2FDefaultBidderCalculator.java)
+
+If none of the above strategies fit the provided BidderContext, the _DEFAULT_ strategy will be chosen.
+It places either remaining cash limit or estimated product price, depending on what is left less.
 
 ## Getting started
 This application provides a simple console application to compete with implemented bot.
@@ -38,10 +71,27 @@ To test it, please do the following instructions:
 3. Run jar file, placed `/target`
 > java -jar target/tradingbot-1.0-SNAPSHOT.jar
 
-
-
-
-
-
-
-
+## Further enhancements
+Further improvements **should primarily be based on formal product requirements**. But already now we can suggest possible ways to improve the application.
+1. Adhere to **microservice architecture**. This follows from the **domain-driven design** and introduces isolation between
+the auction and bidders, and makes delivery and release independent.
+2. Depending on the method of communication between this bot and the auction we need implement the contract for communication.
+Most probably connection will be through **HTTP**, since we need to support consistency between auction and bot.
+It should be kept in mind that there may be two possible options that primarily depend on the business logic of the auction application.
+   1. The auction itself can execute requests to our bot, then we need to implement a connection point to our bot.
+   2. The bot can call an auction when it receives a signal to bid, then you need to implement a call to the api of this auction.
+In any of these options, we need to take care that several auctions can be running at the same time, which means we need to split the resources.
+Bidding contexts between different auctions can be separated by a unique identifier. Access to the context within the same read/write auction 
+must also be synchronized, for example, 
+using locks [ReentrantReadWriteLock](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html).
+3. **Improve the accuracy function** of forecast calculation. Unfortunately, there is not much current data to build full-fledged forecasts.
+Additional parameters that can be relied upon would be - for example, historical data on other auctions, product type, real value of the product.
+Based on this data, you can build more complex models and even apply machine learning. 
+4. Since we must always take care of CI/CD processes, we need to introduce: 
+   1. Insure in code quality
+   - Auto-checking on code linter during the pull request checking, before merging new features.
+   E.g. using **GitHub actions** or **SonarQube**.
+   - Auto execution tests on each pull request and provide detailed report of it.
+   2. Automatic delivery and deployment of new features. E.g configure **GitLab CI/CD** or **Jenkins**.
+   3. Application containerization and separate stands for developers, testers and users.  It contributes to the stability of each stand, 
+   independent feature delivery and increased product satisfaction. (**Docker, Kubernetes, Cloud platforms**)

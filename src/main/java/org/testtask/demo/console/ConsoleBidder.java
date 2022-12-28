@@ -1,12 +1,12 @@
-package org.testtask.console;
+package org.testtask.demo.console;
 
 import org.testtask.auction.Bidder;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static org.testtask.console.ConsoleExecutor.PRODUCTS_TO_DRAW_ROUND;
-import static org.testtask.console.ConsoleExecutor.PRODUCTS_TO_ROUND_WINNER;
+import static org.testtask.demo.console.ConsoleExecutor.PRODUCTS_TO_DRAW_ROUND;
+import static org.testtask.demo.console.ConsoleExecutor.PRODUCTS_TO_ROUND_WINNER;
 
 /**
  * Console bidder is used only in console application to test programmed bidder, and it cannot be used in a real business case.
@@ -14,16 +14,19 @@ import static org.testtask.console.ConsoleExecutor.PRODUCTS_TO_ROUND_WINNER;
  */
 class ConsoleBidder implements Bidder {
 
-    private final ConsoleBidderValidator consoleBidderValidator = new ConsoleBidderValidator();
+    private final ConsoleBidderValidator consoleBidderValidator;
     private final Scanner scanner;
 
-    private boolean initialized = false;
+    private boolean initialized;
     private int monetaryUnits;
     private int quantityUnits;
-    private int wonQuantity = 0;
+    private int wonQuantity;
 
     public ConsoleBidder(Scanner scanner) {
+        this.consoleBidderValidator = new ConsoleBidderValidator();
         this.scanner = scanner;
+        this.initialized = false;
+        this.wonQuantity = 0;
     }
 
     @Override

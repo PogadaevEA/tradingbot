@@ -12,13 +12,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DefaultBidderCalculatorTest {
 
-    @ParameterizedTest(name = "{index}. If quantity = {0}, cash = {1}, own cash balance = {2} Than expected = {3}")
+    @ParameterizedTest(name = "{index}. If estimatedProductCost = {0}, own cash balance = {1} Than expected = {2}")
     @MethodSource("testPlaceBidParameters")
-    void should_place_bid_happy_path(int quantity, int cash, int ownCashBalance, int expected) {
+    void should_place_bid_happy_path(int estimatedProductCost, int ownCashBalance, int expected) {
         // given
-        BidderContext context = new BidderContext();
-        context.init(quantity, cash);
-        context.setOwnCashBalance(ownCashBalance);
+        BidderContext context = new BidderContext.BidderContextBuilder()
+                .withEstimatedProductCost(estimatedProductCost)
+                .withOwnCashBalance(ownCashBalance)
+                .build();
 
         // when
         int result = new DefaultBidderCalculator().placeBid(context);
@@ -46,13 +47,13 @@ class DefaultBidderCalculatorTest {
 
     private static Stream<Arguments> testPlaceBidParameters() {
         return Stream.of(
-                placeBidArgumentsOf(10, 20, 10, 2),
-                placeBidArgumentsOf(10, 20, 1, 1),
-                placeBidArgumentsOf(10, 20, 2, 2)
+                placeBidArgumentsOf(2, 10, 4),
+                placeBidArgumentsOf(2, 1, 1),
+                placeBidArgumentsOf(2, 10, 4)
         );
     }
 
-    private static Arguments placeBidArgumentsOf(int quantity, int cash, int ownCashBalance, int expected) {
-        return Arguments.of(quantity, cash, ownCashBalance, expected);
+    private static Arguments placeBidArgumentsOf(int estimatedProductCost, int ownCashBalance, int expected) {
+        return Arguments.of(estimatedProductCost, ownCashBalance, expected);
     }
 }
